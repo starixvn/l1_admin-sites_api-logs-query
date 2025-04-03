@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HealthController } from '../src/modules/health/health.controller';
-import { HealthService } from '../src/modules/health/health.service';
+import { HealthController } from '../../src/modules/health/health.controller';
+import { HealthService } from '../../src/modules/health/health.service';
+import { getConnectionToken } from '@nestjs/mongoose';
 
 describe('HealthController', () => {
   let controller: HealthController;
@@ -10,16 +11,11 @@ describe('HealthController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
       providers: [
+        HealthService,
         {
-          provide: HealthService,
+          provide: getConnectionToken(),
           useValue: {
-            check: jest.fn().mockResolvedValue({
-              status: 'ok',
-              timestamp: '2024-03-19T00:00:00.000Z',
-              services: {
-                mongodb: 'up',
-              },
-            }),
+            readyState: 1, // Mock MongoDB connected state
           },
         },
       ],
@@ -34,13 +30,13 @@ describe('HealthController', () => {
   });
 
   describe('checkHealth', () => {
-    it('should return health status', async () => {
+    it('should return health status with mongodb up', async () => {
       const result = await controller.checkHealth();
       expect(result).toEqual({
         status: 'ok',
         timestamp: expect.any(String),
         services: {
-          mongodb: expect.any(String),
+          mongodb: 'up',
         },
       });
     });
