@@ -7,14 +7,9 @@ import { HealthModule } from './modules/health/health.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(
-      process.env.MONGODB_URI || 'mongodb://localhost:27017',
-      {
-        dbName: process.env.MONGODB_DB_NAME || 'logs',
-        retryWrites: true,
-        w: 'majority',
-      },
-    ),
+    MongooseModule.forRoot(process.env.MONGODB_URI || '', {
+      dbName: process.env.MONGODB_DB_NAME,
+    }),
     LogsModule,
     HealthModule,
   ],
