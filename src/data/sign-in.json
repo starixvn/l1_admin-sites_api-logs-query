@@ -1,0 +1,40 @@
+{
+  "_id": { "$oid": "67e9ed63fc2f53dcf153f503" },
+  "logTimeStamp": "2025-03-31T01:18:31.7310724+00:00",
+  "requestTimeStamp": "2025-03-31T01:18:30.7091517+00:00",
+  "request": {
+    "_t": "SignIn",
+    "seq": "d,y,lumi",
+    "siteId": "4100300",
+    "domain": "example.com",
+    "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+    "currency": "$US",
+    "language": "vi-VN",
+    "iP": "10.5.10.34",
+    "playerId": 50007,
+    "playerName": "username_50007",
+    "gameTypeId": null,
+    "appType": 1,
+    "siteName": "lumi",
+    "auth": { "operatorId": "ONEworks1" },
+    "operatorToken": "ONEworks1Token",
+    "disableJackpotGames": false,
+    "isCash": true,
+    "ref": "",
+    "returnUrl": "",
+    "disableAward": false
+  },
+  "responseTimeStamp": "2025-03-31T01:18:31.7308688+00:00",
+  "result": {
+    "_t": "SingleSignOnResult",
+    "errorCode": "0",
+    "errorDescription": null,
+    "seq": null,
+    "redirectUrl": "https://l1-games2.lumigame.com/?token=3faa8e60-41ae-4424-8769-0b570f4bca67&lang=vi-VN&appType=1&op=sg&cg=GrUSD",
+    "token": "3faa8e60-41ae-4424-8769-0b570f4bca67"
+  },
+  "__archive": {
+    "eventtime": { "$date": "2025-03-31T01:18:31.731Z" },
+    "v": "3.0.4"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_id": { "$oid": "67ebaaf3fc2f53dcf162743e" },
+  "operatorId": "ONEworks1",
+  "logTimeStamp": "2025-04-01T08:59:23.8203504+00:00",
+  "requestTimeStamp": "2025-04-01T08:59:23.7591182+00:00",
+  "call": {
+    "_t": "SGEnterPortalCall",
+    "seq": "1c0030b9-05d3-41a5-9985-11cf1ee7e8f9",
+    "playerId": 21031988,
+    "siteId": "4100300",
+    "characterName": "",
+    "firstLogin": false,
+    "operatorToken": "ONEworks1Token"
+  },
+  "responseTimeStamp": "2025-04-01T08:59:23.7975179+00:00",
+  "result": {
+    "_t": "PartnerEnterPortalResult",
+    "seq": "1c0030b9-05d3-41a5-9985-11cf1ee7e8f9",
+    "errorCode": 0,
+    "errorMessage": null,
+    "errorDescription": null,
+    "minBet": "1",
+    "maxBet": "3000"
+  },
+  "system": 1,
+  "accessKey": null,
+  "metadata": null,
+  "__archive": {
+    "eventtime": { "$date": "2025-04-01T08:59:23.820Z" },
+    "v": "3.0.4"
+  }
+}

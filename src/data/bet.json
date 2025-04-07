@@ -1,0 +1,46 @@
+{
+  "_id": { "$oid": "67e9fb83fc2f53dcf15bad0f" },
+  "operatorId": "ONEworks1",
+  "logTimeStamp": "2025-03-31T02:18:46.6964263+00:00",
+  "requestTimeStamp": "2025-03-31T02:18:46.6771438+00:00",
+  "call": {
+    "_t": "PartnerPlaceBetCall",
+    "seq": "1db77434-96b4-491e-afca-b592d8fd54ff",
+    "playerId": 1153023,
+    "siteId": "4100300",
+    "gameRoundId": 691470,
+    "gameTypeId": 43,
+    "choiceId": 3,
+    "amount": "1",
+    "currency": "$US",
+    "roundEndTime": null,
+    "ip": "10.5.10.15",
+    "freeSpin": false,
+    "contributionAmount": "0",
+    "contributionRate": 0,
+    "operatorToken": "ONEworks1Token",
+    "freeBet": false,
+    "operatorId": "ONEworks1",
+    "userId": null
+  },
+  "responseTimeStamp": "2025-03-31T02:18:36.8005789+00:00",
+  "result": {
+    "_t": "PartnerPlaceBetResult",
+    "seq": "1db77434-96b4-491e-afca-b592d8fd54ff",
+    "errorCode": 0,
+    "errorMessage": null,
+    "errorDescription": null,
+    "obTransId": null,
+    "playerId": 1153023,
+    "balance": "1999",
+    "minBet": "1",
+    "maxBet": "3000"
+  },
+  "system": 1,
+  "accessKey": null,
+  "metadata": { "mode": "1" },
+  "__archive": {
+    "eventtime": { "$date": "2025-03-31T02:18:46.696Z" },
+    "v": "3.0.4"
+  }
+}
