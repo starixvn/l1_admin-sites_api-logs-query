@@ -1,27 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HealthService } from '../../src/modules/health/health.service';
 import { getConnectionToken } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
+import { HealthService } from '../../../../src/modules/health/health.service';
 
 describe('HealthService', () => {
   let service: HealthService;
-  let mockMongoConnection: { readyState: number };
+  let mongoConnection: { readyState: number };
 
   beforeEach(async () => {
-    mockMongoConnection = {
-      readyState: 1,
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         HealthService,
         {
           provide: getConnectionToken(),
-          useValue: mockMongoConnection,
+          useValue: {
+            readyState: 1,
+          },
         },
       ],
     }).compile();
 
     service = module.get<HealthService>(HealthService);
+    mongoConnection = module.get(getConnectionToken());
   });
 
   it('should be defined', () => {
@@ -29,8 +29,7 @@ describe('HealthService', () => {
   });
 
   describe('check', () => {
-    it('should return up status when mongodb is connected', async () => {
-      mockMongoConnection.readyState = 1;
+    it('should return health status with mongodb up', async () => {
       const result = await service.check();
       expect(result).toEqual({
         status: 'ok',
@@ -41,8 +40,8 @@ describe('HealthService', () => {
       });
     });
 
-    it('should return down status when mongodb is disconnected', async () => {
-      mockMongoConnection.readyState = 0;
+    it('should return health status with mongodb down', async () => {
+      mongoConnection.readyState = 0;
       const result = await service.check();
       expect(result).toEqual({
         status: 'ok',

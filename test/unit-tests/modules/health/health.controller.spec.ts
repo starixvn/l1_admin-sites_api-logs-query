@@ -1,21 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HealthController } from '../../src/modules/health/health.controller';
-import { HealthService } from '../../src/modules/health/health.service';
-import { getConnectionToken } from '@nestjs/mongoose';
+import { HealthController } from '../../../../src/modules/health/health.controller';
+import { HealthService } from '../../../../src/modules/health/health.service';
 
 describe('HealthController', () => {
   let controller: HealthController;
   let service: HealthService;
 
+  const mockHealthResponse = {
+    status: 'ok',
+    timestamp: '2024-01-01T00:00:00Z',
+    services: {
+      mongodb: 'up',
+    },
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
       providers: [
-        HealthService,
         {
-          provide: getConnectionToken(),
+          provide: HealthService,
           useValue: {
-            readyState: 1, // Mock MongoDB connected state
+            check: jest.fn().mockResolvedValue(mockHealthResponse),
           },
         },
       ],
@@ -30,15 +36,10 @@ describe('HealthController', () => {
   });
 
   describe('checkHealth', () => {
-    it('should return health status with mongodb up', async () => {
+    it('should return health status', async () => {
       const result = await controller.checkHealth();
-      expect(result).toEqual({
-        status: 'ok',
-        timestamp: expect.any(String),
-        services: {
-          mongodb: 'up',
-        },
-      });
+      expect(result).toEqual(mockHealthResponse);
+      expect(service.check).toHaveBeenCalled();
     });
   });
 });
