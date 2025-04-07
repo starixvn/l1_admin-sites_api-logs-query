@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+
+# Build output
+dist
+build
+
+# Coverage reports
+coverage
+
+# IDE
+.idea
+.vscode
+
+# Misc
+.git
+.gitignore
+.env
+.env.*
+README.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore 

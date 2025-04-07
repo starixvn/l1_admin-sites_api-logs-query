@@ -10,7 +10,7 @@ export class HealthService {
 
   async check() {
     const mongoStatus = this.mongoConnection.readyState === 1 ? 'up' : 'down';
-    
+
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
@@ -19,4 +19,4 @@ export class HealthService {
       },
     };
   }
-} 
+}

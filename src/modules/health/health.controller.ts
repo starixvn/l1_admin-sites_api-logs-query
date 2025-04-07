@@ -9,4 +9,4 @@ export class HealthController {
   async checkHealth() {
     return this.healthService.check();
   }
-} 
+}
