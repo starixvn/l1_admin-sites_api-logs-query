@@ -1,35 +1,47 @@
 # Build stage
 FROM node:20.18.2-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install dependencies first (better layer caching)
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --prefer-offline \
-    && yarn cache clean
+# Copy package files
+COPY package*.json ./
 
-# Copy source code and build
-COPY tsconfig*.json ./
-COPY src/ src/
-RUN yarn build
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Clean development dependencies
+RUN npm prune --production
 
 # Production stage
 FROM node:20.18.2-alpine AS production
 
-WORKDIR /usr/src/app
+# Add non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nestjs -u 1001
 
-# Copy only production dependencies
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --prefer-offline --production \
-    && yarn cache clean \
-    && rm -rf /usr/local/share/.cache
+WORKDIR /app
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
 
-# Copy built application
-COPY --from=builder /usr/src/app/dist ./dist
+# Copy only necessary files from builder
+COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nestjs:nodejs /app/package*.json ./
 
-# Add non-root user
-USER node
+# Copy environment file if it exists
+COPY --chown=nestjs:nodejs .env* ./
 
+# Use non-root user
+USER nestjs
+
+# Expose the port
 EXPOSE 3000
 
+# Start the application
 CMD ["node", "dist/main"] 

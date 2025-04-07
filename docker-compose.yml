@@ -8,15 +8,16 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongodb:27017/api-logs
+      - MONGODB_URI=mongodb://mongodb:27017/logs
+      - MONGODB_DB_NAME=logs
+      - PORT=3000
     depends_on:
       - mongodb
     networks:
       - app-network
 
   mongodb:
-    image: mongo:6-jammy
+    image: mongo:7.0
     ports:
       - "27017:27017"
     volumes:
