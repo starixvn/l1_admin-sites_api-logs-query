@@ -28,7 +28,7 @@ RUN addgroup -g 1001 -S nodejs && \
 
 WORKDIR /app
 ENV HOSTNAME=0.0.0.0
-ENV PORT=3000
+ENV PORT=5000
 
 # Copy only necessary files from builder
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
@@ -42,7 +42,7 @@ COPY --chown=nestjs:nodejs .env* ./
 USER nestjs
 
 # Expose the port
-EXPOSE 3000
+EXPOSE 5000
 
 # Start the application
 CMD ["node", "dist/main"] 
