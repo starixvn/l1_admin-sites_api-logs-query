@@ -1,4 +1,4 @@
-import { Controller, Get, Redirect } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('default')
@@ -6,10 +6,9 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class AppController {
   @Get()
   @ApiOperation({
-    summary: 'Default route - redirects to health check endpoint',
+    summary: 'Default route - returns API status',
   })
-  @Redirect('/health', 301)
   getDefault() {
-    return;
+    return { status: 'ok' };
   }
 }
