@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20.18.2-alpine AS builder
+FROM hub.lumigame.com/base/node:20.9.0-alpine-24h1.1  AS builder
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Production stage
-FROM node:20.18.2-alpine AS production
+FROM hub.lumigame.com/base/node:20.9.0-alpine-24h1.1  AS production
 
 # Add non-root user for security
 RUN addgroup -g 1001 -S nodejs && \
