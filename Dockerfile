@@ -3,15 +3,14 @@ FROM hub.lumigame.com/base/node:20.9.0-alpine-24h1.1  AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files and config
 COPY package*.json ./
 COPY tsconfig.json ./
 
 # Install dependencies
 RUN npm ci
 
-# Copy source code (explicitly copy src directory first)
-COPY src/ ./src/
+# Copy all source files and configs
 COPY . .
 
 # Build the application
