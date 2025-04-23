@@ -12,27 +12,43 @@ export class LogsController {
   @ApiOperation({ summary: 'Get top N logs by player ID across all types' })
   @ApiQuery({ name: 'playerId', required: true, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({
+    name: 'gameTypeId',
+    required: false,
+    type: Number,
+    description: 'Filter bet logs by game type ID, omit for all games',
+  })
   async getTopLogsByPlayerId(
     @Query('playerId', ParseIntPipe) playerId: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+    @Query('gameTypeId', new ParseIntPipe({ optional: true }))
+    gameTypeId?: number,
   ): Promise<{
     bets: BetLog[];
     endGames: EndGameLog[];
     enterPortals: EnterPortalLog[];
     signIns: SignInLog[];
   }> {
-    return this.logsService.getTopLogsByPlayerId(playerId, limit);
+    return this.logsService.getTopLogsByPlayerId(playerId, limit, gameTypeId);
   }
 
   @Get('bets/top')
   @ApiOperation({ summary: 'Get top N bet logs by player ID' })
   @ApiQuery({ name: 'playerId', required: true, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({
+    name: 'gameTypeId',
+    required: false,
+    type: Number,
+    description: 'Filter by game type ID, omit for all games',
+  })
   async getTopBetLogs(
     @Query('playerId', ParseIntPipe) playerId: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+    @Query('gameTypeId', new ParseIntPipe({ optional: true }))
+    gameTypeId?: number,
   ): Promise<BetLog[]> {
-    return this.logsService.getTopBetLogs(playerId, limit);
+    return this.logsService.getTopBetLogs(playerId, limit, gameTypeId);
   }
 
   @Get('end-games/top')
@@ -75,10 +91,18 @@ export class LogsController {
   @ApiQuery({ name: 'playerId', required: true, type: Number })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
+  @ApiQuery({
+    name: 'gameTypeId',
+    required: false,
+    type: Number,
+    description: 'Filter bet logs by game type ID, omit for all games',
+  })
   async getLogsByPlayerIdAndTimeRange(
     @Query('playerId', ParseIntPipe) playerId: number,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
+    @Query('gameTypeId', new ParseIntPipe({ optional: true }))
+    gameTypeId?: number,
   ): Promise<{
     bets: BetLog[];
     endGames: EndGameLog[];
@@ -89,6 +113,7 @@ export class LogsController {
       playerId,
       startTime,
       endTime,
+      gameTypeId,
     );
   }
 
@@ -97,12 +122,25 @@ export class LogsController {
   @ApiQuery({ name: 'playerId', required: true, type: Number })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
+  @ApiQuery({
+    name: 'gameTypeId',
+    required: false,
+    type: Number,
+    description: 'Filter by game type ID, omit for all games',
+  })
   async getBetLogsByTimeRange(
     @Query('playerId', ParseIntPipe) playerId: number,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
+    @Query('gameTypeId', new ParseIntPipe({ optional: true }))
+    gameTypeId?: number,
   ): Promise<BetLog[]> {
-    return this.logsService.getBetLogsByTimeRange(playerId, startTime, endTime);
+    return this.logsService.getBetLogsByTimeRange(
+      playerId,
+      startTime,
+      endTime,
+      gameTypeId,
+    );
   }
 
   @Get('end-games/time-range')

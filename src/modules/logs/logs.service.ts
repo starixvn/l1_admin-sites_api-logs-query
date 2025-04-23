@@ -13,9 +13,13 @@ export class LogsService {
     @InjectModel(SignInLog.name) private signInLogModel: Model<SignInLog>,
   ) {}
 
-  async getTopLogsByPlayerId(playerId: number, limit: number = 10) {
+  async getTopLogsByPlayerId(
+    playerId: number,
+    limit: number = 10,
+    gameTypeId?: number,
+  ) {
     const [bets, endGames, enterPortals, signIns] = await Promise.all([
-      this.getTopBetLogs(playerId, limit),
+      this.getTopBetLogs(playerId, limit, gameTypeId),
       this.getTopEndGameLogs(playerId, limit),
       this.getTopEnterPortalLogs(playerId, limit),
       this.getTopSignInLogs(playerId, limit),
@@ -29,9 +33,20 @@ export class LogsService {
     };
   }
 
-  async getTopBetLogs(playerId: number, limit: number = 10): Promise<BetLog[]> {
+  async getTopBetLogs(
+    playerId: number,
+    limit: number = 10,
+    gameTypeId?: number,
+  ): Promise<BetLog[]> {
+    const query: any = { 'call.playerId': playerId };
+
+    // Add gameTypeId to query if it's provided
+    if (gameTypeId !== undefined) {
+      query['call.gameTypeId'] = gameTypeId;
+    }
+
     return this.betLogModel
-      .find({ 'call.playerId': playerId })
+      .find(query)
       .sort({ logTimeStamp: -1 })
       .limit(limit)
       .lean()
@@ -78,9 +93,10 @@ export class LogsService {
     playerId: number,
     startTime: string,
     endTime: string,
+    gameTypeId?: number,
   ) {
     const [bets, endGames, enterPortals, signIns] = await Promise.all([
-      this.getBetLogsByTimeRange(playerId, startTime, endTime),
+      this.getBetLogsByTimeRange(playerId, startTime, endTime, gameTypeId),
       this.getEndGameLogsByTimeRange(playerId, startTime, endTime),
       this.getEnterPortalLogsByTimeRange(playerId, startTime, endTime),
       this.getSignInLogsByTimeRange(playerId, startTime, endTime),
@@ -98,12 +114,20 @@ export class LogsService {
     playerId: number,
     startTime: string,
     endTime: string,
+    gameTypeId?: number,
   ): Promise<BetLog[]> {
+    const query: any = {
+      'call.playerId': playerId,
+      logTimeStamp: { $gte: startTime, $lte: endTime },
+    };
+
+    // Add gameTypeId to query if it's provided
+    if (gameTypeId !== undefined) {
+      query['call.gameTypeId'] = gameTypeId;
+    }
+
     return this.betLogModel
-      .find({
-        'call.playerId': playerId,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
-      })
+      .find(query)
       .sort({ logTimeStamp: -1 })
       .lean()
       .exec();
