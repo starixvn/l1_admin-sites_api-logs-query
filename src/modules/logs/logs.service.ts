@@ -118,7 +118,10 @@ export class LogsService {
   ): Promise<BetLog[]> {
     const query: any = {
       'call.playerId': playerId,
-      logTimeStamp: { $gte: startTime, $lte: endTime },
+      logTimeStamp: {
+        $gte: new Date(startTime).toISOString(),
+        $lte: new Date(endTime).toISOString(),
+      },
     };
 
     // Add gameTypeId to query only if it's a positive number
@@ -141,7 +144,10 @@ export class LogsService {
     return this.endGameLogModel
       .find({
         'call.playerId': playerId,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
+        logTimeStamp: {
+          $gte: new Date(startTime).toISOString(),
+          $lte: new Date(endTime).toISOString(),
+        },
       })
       .sort({ logTimeStamp: -1 })
       .lean()
@@ -156,7 +162,10 @@ export class LogsService {
     return this.enterPortalLogModel
       .find({
         'call.playerId': playerId,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
+        logTimeStamp: {
+          $gte: new Date(startTime).toISOString(),
+          $lte: new Date(endTime).toISOString(),
+        },
       })
       .sort({ logTimeStamp: -1 })
       .lean()
@@ -171,7 +180,10 @@ export class LogsService {
     return this.signInLogModel
       .find({
         'request.playerId': playerId,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
+        logTimeStamp: {
+          $gte: new Date(startTime).toISOString(),
+          $lte: new Date(endTime).toISOString(),
+        },
       })
       .sort({ logTimeStamp: -1 })
       .lean()
