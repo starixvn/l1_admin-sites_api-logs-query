@@ -95,19 +95,40 @@ export class LogsService {
     endTime: string,
     gameTypeId?: number,
   ) {
-    const [bets, endGames, enterPortals, signIns] = await Promise.all([
-      this.getBetLogsByTimeRange(playerId, startTime, endTime, gameTypeId),
-      this.getEndGameLogsByTimeRange(playerId, startTime, endTime),
-      this.getEnterPortalLogsByTimeRange(playerId, startTime, endTime),
-      this.getSignInLogsByTimeRange(playerId, startTime, endTime),
-    ]);
+    try {
+      console.log('getLogsByPlayerIdAndTimeRange inputs:', {
+        playerId,
+        startTime,
+        endTime,
+        gameTypeId,
+      });
 
-    return {
-      bets,
-      endGames,
-      enterPortals,
-      signIns,
-    };
+      // If startTime or endTime is missing, use a default 7-day range
+      if (!startTime || !endTime) {
+        const now = new Date();
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        startTime = oneWeekAgo.toISOString();
+        endTime = now.toISOString();
+        console.log('Using default date range:', { startTime, endTime });
+      }
+
+      const [bets, endGames, enterPortals, signIns] = await Promise.all([
+        this.getBetLogsByTimeRange(playerId, startTime, endTime, gameTypeId),
+        this.getEndGameLogsByTimeRange(playerId, startTime, endTime),
+        this.getEnterPortalLogsByTimeRange(playerId, startTime, endTime),
+        this.getSignInLogsByTimeRange(playerId, startTime, endTime),
+      ]);
+
+      return {
+        bets,
+        endGames,
+        enterPortals,
+        signIns,
+      };
+    } catch (error) {
+      console.error('Error in getLogsByPlayerIdAndTimeRange:', error);
+      throw error;
+    }
   }
 
   async getBetLogsByTimeRange(
@@ -116,24 +137,56 @@ export class LogsService {
     endTime: string,
     gameTypeId?: number,
   ): Promise<BetLog[]> {
-    const query: any = {
-      'call.playerId': playerId,
-      logTimeStamp: {
-        $gte: new Date(startTime).toISOString(),
-        $lte: new Date(endTime).toISOString(),
-      },
-    };
+    try {
+      // Log the raw inputs
+      console.log('getBetLogsByTimeRange inputs:', {
+        playerId,
+        startTime,
+        endTime,
+        gameTypeId,
+      });
 
-    // Add gameTypeId to query only if it's a positive number
-    if (gameTypeId && gameTypeId > 0) {
-      query['call.gameTypeId'] = gameTypeId;
+      const query: any = {
+        'call.playerId': playerId,
+      };
+
+      // Add time range to query if both dates are provided
+      if (startTime && endTime) {
+        query.logTimeStamp = {
+          $gte: startTime,
+          $lte: endTime,
+        };
+        console.log('Date query:', JSON.stringify(query.logTimeStamp));
+      } else {
+        // If no date range is provided, default to last 7 days
+        const now = new Date();
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        query.logTimeStamp = {
+          $gte: oneWeekAgo.toISOString(),
+          $lte: now.toISOString(),
+        };
+        console.log(
+          'Using default date range:',
+          JSON.stringify(query.logTimeStamp),
+        );
+      }
+
+      // Add gameTypeId to query only if it's a positive number
+      if (gameTypeId && gameTypeId > 0) {
+        query['call.gameTypeId'] = gameTypeId;
+      }
+
+      console.log('Final query:', JSON.stringify(query));
+
+      return this.betLogModel
+        .find(query)
+        .sort({ logTimeStamp: -1 })
+        .lean()
+        .exec();
+    } catch (error) {
+      console.error('Error in getBetLogsByTimeRange:', error);
+      throw error;
     }
-
-    return this.betLogModel
-      .find(query)
-      .sort({ logTimeStamp: -1 })
-      .lean()
-      .exec();
   }
 
   async getEndGameLogsByTimeRange(
@@ -141,17 +194,36 @@ export class LogsService {
     startTime: string,
     endTime: string,
   ): Promise<EndGameLog[]> {
-    return this.endGameLogModel
-      .find({
+    try {
+      const query: any = {
         'call.playerId': playerId,
-        logTimeStamp: {
-          $gte: new Date(startTime).toISOString(),
-          $lte: new Date(endTime).toISOString(),
-        },
-      })
-      .sort({ logTimeStamp: -1 })
-      .lean()
-      .exec();
+      };
+
+      // Add time range to query if both dates are provided
+      if (startTime && endTime) {
+        query.logTimeStamp = {
+          $gte: startTime,
+          $lte: endTime,
+        };
+      } else {
+        // If no date range is provided, default to last 7 days
+        const now = new Date();
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        query.logTimeStamp = {
+          $gte: oneWeekAgo.toISOString(),
+          $lte: now.toISOString(),
+        };
+      }
+
+      return this.endGameLogModel
+        .find(query)
+        .sort({ logTimeStamp: -1 })
+        .lean()
+        .exec();
+    } catch (error) {
+      console.error('Error in getEndGameLogsByTimeRange:', error);
+      throw error;
+    }
   }
 
   async getEnterPortalLogsByTimeRange(
@@ -159,17 +231,36 @@ export class LogsService {
     startTime: string,
     endTime: string,
   ): Promise<EnterPortalLog[]> {
-    return this.enterPortalLogModel
-      .find({
+    try {
+      const query: any = {
         'call.playerId': playerId,
-        logTimeStamp: {
-          $gte: new Date(startTime).toISOString(),
-          $lte: new Date(endTime).toISOString(),
-        },
-      })
-      .sort({ logTimeStamp: -1 })
-      .lean()
-      .exec();
+      };
+
+      // Add time range to query if both dates are provided
+      if (startTime && endTime) {
+        query.logTimeStamp = {
+          $gte: startTime,
+          $lte: endTime,
+        };
+      } else {
+        // If no date range is provided, default to last 7 days
+        const now = new Date();
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        query.logTimeStamp = {
+          $gte: oneWeekAgo.toISOString(),
+          $lte: now.toISOString(),
+        };
+      }
+
+      return this.enterPortalLogModel
+        .find(query)
+        .sort({ logTimeStamp: -1 })
+        .lean()
+        .exec();
+    } catch (error) {
+      console.error('Error in getEnterPortalLogsByTimeRange:', error);
+      throw error;
+    }
   }
 
   async getSignInLogsByTimeRange(
@@ -177,16 +268,35 @@ export class LogsService {
     startTime: string,
     endTime: string,
   ): Promise<SignInLog[]> {
-    return this.signInLogModel
-      .find({
+    try {
+      const query: any = {
         'request.playerId': playerId,
-        logTimeStamp: {
-          $gte: new Date(startTime).toISOString(),
-          $lte: new Date(endTime).toISOString(),
-        },
-      })
-      .sort({ logTimeStamp: -1 })
-      .lean()
-      .exec();
+      };
+
+      // Add time range to query if both dates are provided
+      if (startTime && endTime) {
+        query.logTimeStamp = {
+          $gte: startTime,
+          $lte: endTime,
+        };
+      } else {
+        // If no date range is provided, default to last 7 days
+        const now = new Date();
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        query.logTimeStamp = {
+          $gte: oneWeekAgo.toISOString(),
+          $lte: now.toISOString(),
+        };
+      }
+
+      return this.signInLogModel
+        .find(query)
+        .sort({ logTimeStamp: -1 })
+        .lean()
+        .exec();
+    } catch (error) {
+      console.error('Error in getSignInLogsByTimeRange:', error);
+      throw error;
+    }
   }
 }

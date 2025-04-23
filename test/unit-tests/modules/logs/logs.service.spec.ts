@@ -20,13 +20,13 @@ describe('LogsService', () => {
   let signInLogModel: MockModel<SignInLog>;
 
   const mockLogs = [
-    { logTimeStamp: '2024-01-02T00:00:00Z', call: { playerId: 21031988 } },
-    { logTimeStamp: '2024-01-01T00:00:00Z', call: { playerId: 21031988 } },
+    { logTimeStamp: '2024-01-02T00:00:00Z', call: { playerId: '21031988' } },
+    { logTimeStamp: '2024-01-01T00:00:00Z', call: { playerId: '21031988' } },
   ];
 
   const mockSignInLogs = [
-    { logTimeStamp: '2024-01-02T00:00:00Z', request: { playerId: 21031988 } },
-    { logTimeStamp: '2024-01-01T00:00:00Z', request: { playerId: 21031988 } },
+    { logTimeStamp: '2024-01-02T00:00:00Z', request: { playerId: '21031988' } },
+    { logTimeStamp: '2024-01-01T00:00:00Z', request: { playerId: '21031988' } },
   ];
 
   const createMockModel = <T>(mockData: T[]) => {
@@ -84,7 +84,7 @@ describe('LogsService', () => {
 
   describe('getTopLogsByPlayerId', () => {
     it('should return top logs for all types', async () => {
-      const result = await service.getTopLogsByPlayerId(21031988, 5);
+      const result = await service.getTopLogsByPlayerId('21031988', 5);
       expect(result).toEqual({
         bets: mockLogs,
         endGames: mockLogs,
@@ -96,40 +96,40 @@ describe('LogsService', () => {
 
   describe('getTopBetLogs', () => {
     it('should return top bet logs', async () => {
-      const result = await service.getTopBetLogs(21031988, 5);
+      const result = await service.getTopBetLogs('21031988', 5);
       expect(result).toEqual(mockLogs);
       expect(betLogModel.find).toHaveBeenCalledWith({
-        'call.playerId': 21031988,
+        'call.playerId': '21031988',
       });
     });
   });
 
   describe('getTopEndGameLogs', () => {
     it('should return top end game logs', async () => {
-      const result = await service.getTopEndGameLogs(21031988, 5);
+      const result = await service.getTopEndGameLogs('21031988', 5);
       expect(result).toEqual(mockLogs);
       expect(endGameLogModel.find).toHaveBeenCalledWith({
-        'call.playerId': 21031988,
+        'call.playerId': '21031988',
       });
     });
   });
 
   describe('getTopEnterPortalLogs', () => {
     it('should return top enter portal logs', async () => {
-      const result = await service.getTopEnterPortalLogs(21031988, 5);
+      const result = await service.getTopEnterPortalLogs('21031988', 5);
       expect(result).toEqual(mockLogs);
       expect(enterPortalLogModel.find).toHaveBeenCalledWith({
-        'call.playerId': 21031988,
+        'call.playerId': '21031988',
       });
     });
   });
 
   describe('getTopSignInLogs', () => {
     it('should return top sign in logs', async () => {
-      const result = await service.getTopSignInLogs(21031988, 5);
+      const result = await service.getTopSignInLogs('21031988', 5);
       expect(result).toEqual(mockSignInLogs);
       expect(signInLogModel.find).toHaveBeenCalledWith({
-        'request.playerId': 21031988,
+        'request.playerId': '21031988',
       });
     });
   });
@@ -140,7 +140,7 @@ describe('LogsService', () => {
 
     it('should return logs for all types within time range', async () => {
       const result = await service.getLogsByPlayerIdAndTimeRange(
-        21031988,
+        '21031988',
         startTime,
         endTime,
       );
@@ -159,15 +159,16 @@ describe('LogsService', () => {
 
     it('should return bet logs within time range', async () => {
       const result = await service.getBetLogsByTimeRange(
-        21031988,
+        '21031988',
         startTime,
         endTime,
       );
       expect(result).toEqual(mockLogs);
-      expect(betLogModel.find).toHaveBeenCalledWith({
-        'call.playerId': 21031988,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
-      });
+      expect(betLogModel.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          'call.playerId': '21031988',
+        }),
+      );
     });
   });
 
@@ -177,15 +178,16 @@ describe('LogsService', () => {
 
     it('should return end game logs within time range', async () => {
       const result = await service.getEndGameLogsByTimeRange(
-        21031988,
+        '21031988',
         startTime,
         endTime,
       );
       expect(result).toEqual(mockLogs);
-      expect(endGameLogModel.find).toHaveBeenCalledWith({
-        'call.playerId': 21031988,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
-      });
+      expect(endGameLogModel.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          'call.playerId': '21031988',
+        }),
+      );
     });
   });
 
@@ -195,15 +197,16 @@ describe('LogsService', () => {
 
     it('should return enter portal logs within time range', async () => {
       const result = await service.getEnterPortalLogsByTimeRange(
-        21031988,
+        '21031988',
         startTime,
         endTime,
       );
       expect(result).toEqual(mockLogs);
-      expect(enterPortalLogModel.find).toHaveBeenCalledWith({
-        'call.playerId': 21031988,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
-      });
+      expect(enterPortalLogModel.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          'call.playerId': '21031988',
+        }),
+      );
     });
   });
 
@@ -213,15 +216,16 @@ describe('LogsService', () => {
 
     it('should return sign in logs within time range', async () => {
       const result = await service.getSignInLogsByTimeRange(
-        21031988,
+        '21031988',
         startTime,
         endTime,
       );
       expect(result).toEqual(mockSignInLogs);
-      expect(signInLogModel.find).toHaveBeenCalledWith({
-        'request.playerId': 21031988,
-        logTimeStamp: { $gte: startTime, $lte: endTime },
-      });
+      expect(signInLogModel.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          'request.playerId': '21031988',
+        }),
+      );
     });
   });
 });

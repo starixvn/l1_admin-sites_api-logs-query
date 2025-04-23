@@ -1,4 +1,10 @@
-import { Controller, Get, Query, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  ParseIntPipe,
+  BadRequestException,
+} from '@nestjs/common';
 import { LogsService } from './logs.service';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BetLog, EndGameLog, EnterPortalLog, SignInLog } from './schemas';
@@ -109,12 +115,31 @@ export class LogsController {
     enterPortals: EnterPortalLog[];
     signIns: SignInLog[];
   }> {
-    return this.logsService.getLogsByPlayerIdAndTimeRange(
-      playerId,
-      startTime,
-      endTime,
-      gameTypeId,
-    );
+    try {
+      // Validate required parameters
+      if (!playerId) {
+        throw new BadRequestException('playerId is required');
+      }
+      if (!startTime) {
+        throw new BadRequestException('startTime is required');
+      }
+      if (!endTime) {
+        throw new BadRequestException('endTime is required');
+      }
+
+      console.log(
+        `Time range query params: playerId=${playerId}, startTime=${startTime}, endTime=${endTime}, gameTypeId=${gameTypeId}`,
+      );
+      return this.logsService.getLogsByPlayerIdAndTimeRange(
+        playerId,
+        startTime,
+        endTime,
+        gameTypeId,
+      );
+    } catch (error) {
+      console.error('Error in time range query:', error);
+      throw error;
+    }
   }
 
   @Get('bets/time-range')
@@ -135,12 +160,31 @@ export class LogsController {
     @Query('gameTypeId', new ParseIntPipe({ optional: true }))
     gameTypeId?: number,
   ): Promise<BetLog[]> {
-    return this.logsService.getBetLogsByTimeRange(
-      playerId,
-      startTime,
-      endTime,
-      gameTypeId,
-    );
+    try {
+      // Validate required parameters
+      if (!playerId) {
+        throw new BadRequestException('playerId is required');
+      }
+      if (!startTime) {
+        throw new BadRequestException('startTime is required');
+      }
+      if (!endTime) {
+        throw new BadRequestException('endTime is required');
+      }
+
+      console.log(
+        `Bet logs time range query: playerId=${playerId}, startTime=${startTime}, endTime=${endTime}, gameTypeId=${gameTypeId}`,
+      );
+      return this.logsService.getBetLogsByTimeRange(
+        playerId,
+        startTime,
+        endTime,
+        gameTypeId,
+      );
+    } catch (error) {
+      console.error('Error in bet logs time range query:', error);
+      throw error;
+    }
   }
 
   @Get('end-games/time-range')
@@ -155,11 +199,27 @@ export class LogsController {
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
   ): Promise<EndGameLog[]> {
-    return this.logsService.getEndGameLogsByTimeRange(
-      playerId,
-      startTime,
-      endTime,
-    );
+    try {
+      // Validate required parameters
+      if (!playerId) {
+        throw new BadRequestException('playerId is required');
+      }
+      if (!startTime) {
+        throw new BadRequestException('startTime is required');
+      }
+      if (!endTime) {
+        throw new BadRequestException('endTime is required');
+      }
+
+      return this.logsService.getEndGameLogsByTimeRange(
+        playerId,
+        startTime,
+        endTime,
+      );
+    } catch (error) {
+      console.error('Error in end game logs time range query:', error);
+      throw error;
+    }
   }
 
   @Get('enter-portals/time-range')
@@ -174,11 +234,27 @@ export class LogsController {
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
   ): Promise<EnterPortalLog[]> {
-    return this.logsService.getEnterPortalLogsByTimeRange(
-      playerId,
-      startTime,
-      endTime,
-    );
+    try {
+      // Validate required parameters
+      if (!playerId) {
+        throw new BadRequestException('playerId is required');
+      }
+      if (!startTime) {
+        throw new BadRequestException('startTime is required');
+      }
+      if (!endTime) {
+        throw new BadRequestException('endTime is required');
+      }
+
+      return this.logsService.getEnterPortalLogsByTimeRange(
+        playerId,
+        startTime,
+        endTime,
+      );
+    } catch (error) {
+      console.error('Error in enter portal logs time range query:', error);
+      throw error;
+    }
   }
 
   @Get('sign-ins/time-range')
@@ -193,10 +269,26 @@ export class LogsController {
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
   ): Promise<SignInLog[]> {
-    return this.logsService.getSignInLogsByTimeRange(
-      playerId,
-      startTime,
-      endTime,
-    );
+    try {
+      // Validate required parameters
+      if (!playerId) {
+        throw new BadRequestException('playerId is required');
+      }
+      if (!startTime) {
+        throw new BadRequestException('startTime is required');
+      }
+      if (!endTime) {
+        throw new BadRequestException('endTime is required');
+      }
+
+      return this.logsService.getSignInLogsByTimeRange(
+        playerId,
+        startTime,
+        endTime,
+      );
+    } catch (error) {
+      console.error('Error in sign in logs time range query:', error);
+      throw error;
+    }
   }
 }
