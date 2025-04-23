@@ -21,7 +21,7 @@ export class EndGameLog extends Document {
   @Prop({ type: Object })
   call: {
     _t: string;
-    playerId: number;
+    playerId: string;
     siteId: string;
     seq: string;
     gameRoundId: number;

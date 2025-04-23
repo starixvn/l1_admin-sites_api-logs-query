@@ -14,7 +14,7 @@ export class LogsService {
   ) {}
 
   async getTopLogsByPlayerId(
-    playerId: number,
+    playerId: string,
     limit: number = 10,
     gameTypeId?: number,
   ) {
@@ -34,7 +34,7 @@ export class LogsService {
   }
 
   async getTopBetLogs(
-    playerId: number,
+    playerId: string,
     limit: number = 10,
     gameTypeId?: number,
   ): Promise<BetLog[]> {
@@ -54,7 +54,7 @@ export class LogsService {
   }
 
   async getTopEndGameLogs(
-    playerId: number,
+    playerId: string,
     limit: number = 10,
   ): Promise<EndGameLog[]> {
     return this.endGameLogModel
@@ -66,7 +66,7 @@ export class LogsService {
   }
 
   async getTopEnterPortalLogs(
-    playerId: number,
+    playerId: string,
     limit: number = 10,
   ): Promise<EnterPortalLog[]> {
     return this.enterPortalLogModel
@@ -78,7 +78,7 @@ export class LogsService {
   }
 
   async getTopSignInLogs(
-    playerId: number,
+    playerId: string,
     limit: number = 10,
   ): Promise<SignInLog[]> {
     return this.signInLogModel
@@ -90,7 +90,7 @@ export class LogsService {
   }
 
   async getLogsByPlayerIdAndTimeRange(
-    playerId: number,
+    playerId: string,
     startTime: string,
     endTime: string,
     gameTypeId?: number,
@@ -111,7 +111,7 @@ export class LogsService {
   }
 
   async getBetLogsByTimeRange(
-    playerId: number,
+    playerId: string,
     startTime: string,
     endTime: string,
     gameTypeId?: number,
@@ -134,7 +134,7 @@ export class LogsService {
   }
 
   async getEndGameLogsByTimeRange(
-    playerId: number,
+    playerId: string,
     startTime: string,
     endTime: string,
   ): Promise<EndGameLog[]> {
@@ -149,7 +149,7 @@ export class LogsService {
   }
 
   async getEnterPortalLogsByTimeRange(
-    playerId: number,
+    playerId: string,
     startTime: string,
     endTime: string,
   ): Promise<EnterPortalLog[]> {
@@ -164,7 +164,7 @@ export class LogsService {
   }
 
   async getSignInLogsByTimeRange(
-    playerId: number,
+    playerId: string,
     startTime: string,
     endTime: string,
   ): Promise<SignInLog[]> {

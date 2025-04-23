@@ -10,7 +10,7 @@ export class LogsController {
 
   @Get('top')
   @ApiOperation({ summary: 'Get top N logs by player ID across all types' })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({
     name: 'gameTypeId',
@@ -19,7 +19,7 @@ export class LogsController {
     description: 'Filter bet logs by game type ID, omit for all games',
   })
   async getTopLogsByPlayerId(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
     @Query('gameTypeId', new ParseIntPipe({ optional: true }))
     gameTypeId?: number,
@@ -34,7 +34,7 @@ export class LogsController {
 
   @Get('bets/top')
   @ApiOperation({ summary: 'Get top N bet logs by player ID' })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({
     name: 'gameTypeId',
@@ -43,7 +43,7 @@ export class LogsController {
     description: 'Filter by game type ID, omit for all games',
   })
   async getTopBetLogs(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
     @Query('gameTypeId', new ParseIntPipe({ optional: true }))
     gameTypeId?: number,
@@ -53,10 +53,10 @@ export class LogsController {
 
   @Get('end-games/top')
   @ApiOperation({ summary: 'Get top N end game logs by player ID' })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   async getTopEndGameLogs(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ): Promise<EndGameLog[]> {
     return this.logsService.getTopEndGameLogs(playerId, limit);
@@ -64,10 +64,10 @@ export class LogsController {
 
   @Get('enter-portals/top')
   @ApiOperation({ summary: 'Get top N enter portal logs by player ID' })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   async getTopEnterPortalLogs(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ): Promise<EnterPortalLog[]> {
     return this.logsService.getTopEnterPortalLogs(playerId, limit);
@@ -75,10 +75,10 @@ export class LogsController {
 
   @Get('sign-ins/top')
   @ApiOperation({ summary: 'Get top N sign in logs by player ID' })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   async getTopSignInLogs(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ): Promise<SignInLog[]> {
     return this.logsService.getTopSignInLogs(playerId, limit);
@@ -88,7 +88,7 @@ export class LogsController {
   @ApiOperation({
     summary: 'Get logs by player ID within a time range across all types',
   })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
   @ApiQuery({
@@ -98,7 +98,7 @@ export class LogsController {
     description: 'Filter bet logs by game type ID, omit for all games',
   })
   async getLogsByPlayerIdAndTimeRange(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
     @Query('gameTypeId', new ParseIntPipe({ optional: true }))
@@ -119,7 +119,7 @@ export class LogsController {
 
   @Get('bets/time-range')
   @ApiOperation({ summary: 'Get bet logs by player ID within a time range' })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
   @ApiQuery({
@@ -129,7 +129,7 @@ export class LogsController {
     description: 'Filter by game type ID, omit for all games',
   })
   async getBetLogsByTimeRange(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
     @Query('gameTypeId', new ParseIntPipe({ optional: true }))
@@ -147,11 +147,11 @@ export class LogsController {
   @ApiOperation({
     summary: 'Get end game logs by player ID within a time range',
   })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
   async getEndGameLogsByTimeRange(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
   ): Promise<EndGameLog[]> {
@@ -166,11 +166,11 @@ export class LogsController {
   @ApiOperation({
     summary: 'Get enter portal logs by player ID within a time range',
   })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
   async getEnterPortalLogsByTimeRange(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
   ): Promise<EnterPortalLog[]> {
@@ -185,11 +185,11 @@ export class LogsController {
   @ApiOperation({
     summary: 'Get sign in logs by player ID within a time range',
   })
-  @ApiQuery({ name: 'playerId', required: true, type: Number })
+  @ApiQuery({ name: 'playerId', required: true, type: String })
   @ApiQuery({ name: 'startTime', required: true, type: String })
   @ApiQuery({ name: 'endTime', required: true, type: String })
   async getSignInLogsByTimeRange(
-    @Query('playerId', ParseIntPipe) playerId: number,
+    @Query('playerId') playerId: string,
     @Query('startTime') startTime: string,
     @Query('endTime') endTime: string,
   ): Promise<SignInLog[]> {

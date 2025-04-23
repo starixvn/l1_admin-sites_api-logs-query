@@ -18,7 +18,7 @@ export class SignInLog extends Document {
   @Prop({ type: Object })
   request: {
     _t: string;
-    playerId: number;
+    playerId: string;
     siteId: string;
     seq: string;
     operatorToken: string;
