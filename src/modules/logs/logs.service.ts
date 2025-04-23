@@ -40,8 +40,8 @@ export class LogsService {
   ): Promise<BetLog[]> {
     const query: any = { 'call.playerId': playerId };
 
-    // Add gameTypeId to query if it's provided
-    if (gameTypeId !== undefined) {
+    // Add gameTypeId to query only if it's a positive number
+    if (gameTypeId && gameTypeId > 0) {
       query['call.gameTypeId'] = gameTypeId;
     }
 
@@ -121,8 +121,8 @@ export class LogsService {
       logTimeStamp: { $gte: startTime, $lte: endTime },
     };
 
-    // Add gameTypeId to query if it's provided
-    if (gameTypeId !== undefined) {
+    // Add gameTypeId to query only if it's a positive number
+    if (gameTypeId && gameTypeId > 0) {
       query['call.gameTypeId'] = gameTypeId;
     }
 
